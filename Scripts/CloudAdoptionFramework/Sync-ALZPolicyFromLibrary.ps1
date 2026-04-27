@@ -31,7 +31,7 @@ Param(
 if ($Tag -eq "") {
     switch ($Type) {
         'ALZ' {
-            $Tag = "platform/alz/2026.04.0"
+            $Tag = "platform/alz/2026.04.2"
         }
         'FSI' {
             $Tag = "platform/fsi/2025.03.0"
@@ -40,7 +40,7 @@ if ($Tag -eq "") {
             $Tag = "platform/amba/2025.11.0"
         }
         'SLZ' {
-            $Tag = "platform/slz/2026.02.1"
+            $Tag = "platform/slz/2026.04.2"
         }
     }
 }
@@ -335,7 +335,7 @@ try {
     }
 
     # Get rid of a duplicate landing zones archetype if it exists
-    if ($finalArchetypeArray.name -contains "landingzones" -and $finalArchetypeArray.name -contains "landing_zones") {
+    if (($finalArchetypeArray.name -contains "landingzones" -and $finalArchetypeArray.name -contains "landing_zones")) {
         $finalArchetypeArray = $finalArchetypeArray | Where-Object { $_.name -ne "landing_zones" }
     }
 
@@ -369,6 +369,14 @@ try {
                 $archetype.policy_assignments = @($archetype.policy_assignments | Where-Object { $_ -notin $overrideRemovals })
             }
         }
+    }
+
+    if ($cleanupArchetype -contains "alz") {
+        $cleanupArchetype += "root"
+    }
+
+    if ($cleanupArchetype -contains "landingzones") {
+        $cleanupArchetype += "landing_zones"
     }
 
     # Cleanup any archetypes that are based on modified archetypes but were not themselves modified and now have no assignments
