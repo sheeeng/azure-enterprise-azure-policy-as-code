@@ -132,7 +132,7 @@ The script `Update-AssignmentScope.ps1` (in `Scripts/Helpers`) edits the `scope`
 Add a new selector to every assignment file in `Definitions/policyAssignments` (recursive):
 
 ```powershell
-.\Scripts\Helpers\Update-AssignmentScope.ps1 `
+.\Scripts\Operations\Update-AssignmentScope.ps1 `
     -Scope NonProd -Action Append `
     -Values "/providers/Microsoft.Management/managementGroups/00000000-0000-0000-0000-000000000000"
 ```
@@ -140,7 +140,7 @@ Add a new selector to every assignment file in `Definitions/policyAssignments` (
 Overwrite the `TenantRootGroup` selector on a single nested node:
 
 ```powershell
-.\Scripts\Helpers\Update-AssignmentScope.ps1 `
+.\Scripts\Operations\Update-AssignmentScope.ps1 `
     -Path .\Definitions\policyAssignments\RestrictPublicAccess-Assignment-20260423.jsonc `
     -NodeName "TenantRootGroup/" `
     -Scope TenantRootGroup -Action Set `
@@ -153,7 +153,7 @@ Overwrite the `TenantRootGroup` selector on a single nested node:
 Remove a selector from every node in every file under a folder, with backups:
 
 ```powershell
-.\Scripts\Helpers\Update-AssignmentScope.ps1 `
+.\Scripts\Operations\Update-AssignmentScope.ps1 `
     -Path .\Definitions\policyAssignments -Recurse `
     -Scope NonProd -Action Delete -Backup
 ```
@@ -161,7 +161,7 @@ Remove a selector from every node in every file under a folder, with backups:
 Append to the `TenantRootGroup` selector inside the `notScopes` block:
 
 ```powershell
-.\Scripts\Helpers\Update-AssignmentScope.ps1 `
+.\Scripts\Operations\Update-AssignmentScope.ps1 `
     -NotScopes TenantRootGroup -Action Append `
     -Values "/subscriptions/00000000-0000-0000-0000-000000000000"
 ```
@@ -169,7 +169,7 @@ Append to the `TenantRootGroup` selector inside the `notScopes` block:
 Preview changes without writing:
 
 ```powershell
-.\Scripts\Helpers\Update-AssignmentScope.ps1 -Scope NonProd -Action Delete -WhatIf
+.\Scripts\Operations\Update-AssignmentScope.ps1 -Scope NonProd -Action Delete -WhatIf
 ```
 
 ### Notes
