@@ -267,8 +267,19 @@ if ($Action -eq 'Delete' -and $Values) {
 # Resolve target files
 $defaultFolderUsed = $false
 if (-not $Path) {
-    # Default: <repo>/Definitions/policyAssignments (script lives in Scripts/Helpers)
-    $Path = Join-Path (Resolve-Path "$PSScriptRoot/../..").Path "Definitions/policyAssignments"
+    # Default resolution order (matches EPAC convention used by Build-DeploymentPlans):
+    #   1. $env:PAC_DEFINITIONS_FOLDER  (+ /policyAssignments)
+    #   2. <cwd>/Definitions/policyAssignments
+    # Note: $PSScriptRoot is intentionally NOT used here. When this script is
+    # exposed via the EnterprisePolicyAsCode module, $PSScriptRoot points at
+    # the installed module path, not the user's EPAC repo.
+    $definitionsRoot = if ($env:PAC_DEFINITIONS_FOLDER) {
+        $env:PAC_DEFINITIONS_FOLDER
+    }
+    else {
+        Join-Path (Get-Location).Path 'Definitions'
+    }
+    $Path = Join-Path $definitionsRoot 'policyAssignments'
     $defaultFolderUsed = $true
     Write-Host "No -Path supplied; defaulting to '$Path' (recursive)."
 }
